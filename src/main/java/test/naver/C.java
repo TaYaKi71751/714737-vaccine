@@ -18,8 +18,14 @@ public class C extends Object {
     public C() throws Exception {
         if (System.getProperty("os.name").contains("Linux")) {
             Arrays.asList(new File(System.getProperty("user.home") + "/.mozilla/firefox").listFiles()).stream()
-                    .filter(a -> a.getPath().contains("default") && a.getPath().contains("dev-edition")).forEach(a -> {
+                    .filter(a -> a.getPath().contains("default") && a.getPath().contains("dev-edition") && a.isDirectory()).forEach(a -> {
                         this.cookieSQLitePath = a + "/cookies.sqlite";
+                    });
+        }
+        if (System.getProperty("os.name").contains("Windows")) {
+            Arrays.asList(new File(System.getProperty("user.home") + "\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles").listFiles()).stream()
+                    .filter(a -> a.getPath().contains("default") && a.getPath().contains("dev-edition") && a.isDirectory()).forEach(a -> {
+                        this.cookieSQLitePath = a + "\\cookies.sqlite";
                     });
         }
     }
