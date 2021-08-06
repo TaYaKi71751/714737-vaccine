@@ -15,8 +15,9 @@ class R {
     okhttp3.Response $auth_res;
     okhttp3.Response $info_res;
     String orgCd, sid, cookieString, NID_SES;
-    okhttp3.OkHttpClient nonRdrctOkHttpClient = new okhttp3.OkHttpClient.Builder().followSslRedirects(true)
-            .cache(new Cache(new File("_cache"), 1024L * 1024L * 1024L * 1024L)).followRedirects(false).build();
+    okhttp3.OkHttpClient.Builder okHttpClientBuilder = new okhttp3.OkHttpClient.Builder().followSslRedirects(true)
+            .cache(new Cache(new File("_cache"), 1024L * 1024L * 1024L * 1024L)).followRedirects(false);
+    okhttp3.OkHttpClient nonRdrctOkHttpClient = okHttpClientBuilder.build();
     okhttp3.Headers.Builder headersBuilder = new okhttp3.Headers.Builder();
     okhttp3.Request.Builder reqestBuilder = new okhttp3.Request.Builder();
     okhttp3.Cookie.Builder cookieBuilder = new okhttp3.Cookie.Builder();
@@ -33,6 +34,7 @@ class R {
     }
 
     public void auth() throws Exception {
+        $auth_res = null;
         if (isExpired()) {
             throw new test.naver.exception.InvalidLogInException();
         }
@@ -48,14 +50,16 @@ class R {
     }
 
     public void info() throws Exception {
+        $info_res = null;
         while ($info_res == null || $info_res.code() / 100 == 3 || $info_res.header("Location") != null) {
             this.$info_res = nonRdrctOkHttpClient
                     .newCall(reqestBuilder.url(($info_res == null ? $auth_res : $info_res).header("Location"))
                             .headers(headersBuilder.build()).build())
                     .execute();
-            if($info_res.code() / 100 == 2) break;
-            if ($info_res.code() / 100 == 4) break;
-                // throw new test.naver.exception.HttpResponseException(this.$info_res);
+            if ($info_res.code() / 100 == 2)
+                break;
+            if ($info_res.code() / 100 == 4)
+                throw new test.naver.exception.HttpResponseException(this.$info_res);
         }
     }
 
