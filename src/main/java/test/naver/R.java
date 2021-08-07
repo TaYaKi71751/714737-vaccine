@@ -46,6 +46,7 @@ class R {
                     .execute();
             if ($auth_res.code() / 100 == 4)
                 throw new test.naver.exception.HttpResponseException();
+            this.$auth_res.close();
         }
     }
 
@@ -60,6 +61,7 @@ class R {
                 break;
             if ($info_res.code() / 100 == 4)
                 throw new test.naver.exception.HttpResponseException(this.$info_res);
+            this.$info_res.close();
         }
     }
 
