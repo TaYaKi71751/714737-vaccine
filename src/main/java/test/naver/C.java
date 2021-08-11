@@ -43,11 +43,8 @@ public class C extends Object {
     }
 
     public void s(okhttp3.Request.Builder q, okhttp3.Response e) throws Exception {
-        if (e == null) {
+        if (e == null || (e.header("Set-Cookie") == null && e.header("Location") == null)) {
             return;
-        }
-        if (e.header("Set-Cookie") == null) {
-            throw new InvalidLogInException("Cannot parse Cookies because Set-Cookie is null.");
         }
         for (Cookie a : okhttp3.Cookie.parseAll(q.getUrl$okhttp(), e.headers()).stream()
                 .filter(a -> a.name().contains("NID_SES")).toList()) {
