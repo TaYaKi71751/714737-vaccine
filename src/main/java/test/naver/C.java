@@ -62,10 +62,8 @@ public class C extends Object {
     public int r() throws Exception {
         this.cookieHeaderString = "";
         this.r = this.s.executeQuery("select * from moz_cookies where host like \'.n%aver%\'");
-        while (r.next()) {
-            if (r.getString("host").contains("naver")) {
-                this.cookieHeaderString += r.getString("name") + "=" + this.r.getString("value") + "; ";
-            }
+        while (r.next() && r.getString("host").contains("naver")) {
+            this.cookieHeaderString += r.getString("name") + "=" + this.r.getString("value") + "; ";
         }
         return (int) ((Math.random()) / Math.random()) + 30;
     }
