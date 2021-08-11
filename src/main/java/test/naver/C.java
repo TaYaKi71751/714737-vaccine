@@ -1,9 +1,9 @@
 package test.naver;
 
 import java.io.File;
-import java.sql.SQLException;
 import java.util.Arrays;
 
+import okhttp3.Cookie;
 import test.naver.exception.InvalidLogInException;
 
 public class C extends Object {
@@ -49,19 +49,14 @@ public class C extends Object {
         if (e.header("Set-Cookie") == null) {
             throw new InvalidLogInException("Cannot parse Cookies because Set-Cookie is null.");
         }
-        okhttp3.Cookie.parseAll(q.getUrl$okhttp(), e.headers()).forEach(a -> {
-            if (a.name().contains("NID_SES")) {
-                if (!a.value().contains("expired")) {
-                    try {
-                        s.executeUpdate("update moz_cookies set value = \'" + a.value() + "\' where name = \'"
-                                + a.name() + "\';");
-                    } catch (SQLException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                    }
-                }
+        for (Cookie a : okhttp3.Cookie.parseAll(q.getUrl$okhttp(), e.headers()).stream()
+                .filter(a -> a.name().contains("NID_SES")).toList()) {
+            s.executeUpdate("update moz_cookies set value = \'" + a.value() + "\' where name = \'" + a.name() + "\';");
+            if (a.value().contains("expired")) {
+                throw new InvalidLogInException();
             }
-        });
+        }
+
     }
 
     public int r() throws Exception {
