@@ -16,18 +16,15 @@ public class C extends Object {
     final static java.lang.String jdbcSQLitePrefixString = "jdbc:sqlite:";
 
     public C() throws Exception {
-        if (System.getProperty("os.name").contains("Linux")) {
-            Arrays.asList(new File(System.getProperty("user.home") + "/.mozilla/firefox").listFiles()).stream()
-                    .filter(a -> a.getPath().contains("default") && a.getPath().contains("dev-edition") && a.isDirectory()).forEach(a -> {
-                        this.cookieSQLitePath = a + "/cookies.sqlite";
-                    });
-        }
-        if (System.getProperty("os.name").contains("Windows")) {
-            Arrays.asList(new File(System.getProperty("user.home") + "\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles").listFiles()).stream()
-                    .filter(a -> a.getPath().contains("default") && a.getPath().contains("dev-edition") && a.isDirectory()).forEach(a -> {
-                        this.cookieSQLitePath = a + "\\cookies.sqlite";
-                    });
-        }
+        Arrays.asList(new File(System.getProperty("user.home") + (System.getProperty("os.name").contains("Linux")
+                ? "/.mozilla/firefox"
+                : (System.getProperty("os.name").contains("Windows") ? "\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles"
+                        : ""))).listFiles())
+                .stream()
+                .filter(a -> a.getPath().contains("default") && a.getPath().contains("dev-edition") && a.isDirectory())
+                .forEach(a -> {
+                    this.cookieSQLitePath = a + "/cookies.sqlite";
+                });
     }
 
     public Object b() throws Exception {
@@ -46,27 +43,30 @@ public class C extends Object {
     }
 
     public void s(okhttp3.Request.Builder q, okhttp3.Response e) throws Exception {
-        if(e==null){
+        if (e == null) {
             return;
         }
-        if(e.header("Set-Cookie")==null){
+        if (e.header("Set-Cookie") == null) {
             throw new InvalidLogInException("Cannot parse Cookies because Set-Cookie is null.");
         }
         okhttp3.Cookie.parseAll(q.getUrl$okhttp(), e.headers()).forEach(a -> {
             if (a.name().contains("NID_SES")) {
-                if(!a.value().contains("expired")){try {
-                    s.executeUpdate("update moz_cookies set value = \'" + a.value() + "\' where name = \'" + a.name() + "\';");
-                } catch (SQLException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }}
+                if (!a.value().contains("expired")) {
+                    try {
+                        s.executeUpdate("update moz_cookies set value = \'" + a.value() + "\' where name = \'"
+                                + a.name() + "\';");
+                    } catch (SQLException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                }
             }
         });
     }
 
     public int r() throws Exception {
         this.cookieHeaderString = "";
-        this.r = this.s.executeQuery("select * from moz_cookies");
+        this.r = this.s.executeQuery("select * from moz_cookies where host like \'.n%aver%\'");
         while (r.next()) {
             if (r.getString("host").contains("naver")) {
                 this.cookieHeaderString += r.getString("name") + "=" + this.r.getString("value") + "; ";
