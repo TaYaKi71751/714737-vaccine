@@ -45,4 +45,5 @@ jobs:
         - uses: actions/upload-artifact@v2
           with:
             name: package
-            path: $GITHUB_WORKSPACE/target
+            path: |
+              target/*.jar
