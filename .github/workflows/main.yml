@@ -1,0 +1,55 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  release:
+    types: [created]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+        - uses: actions/checkout@v2
+        - name: test
+          run: |
+            sudo apt-get update
+            sudo ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime 
+            sudo apt-get install tzdata -y
+            sudo dpkg-reconfigure --frontend noninteractive tzdata
+            sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+            sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+            sudo apt-get update && sudo apt-get install docker-ce
+            sudo usermod -aG docker $USER
+            docker build --force-rm --tag dockerfile:build .
+            docker run -i -t -d -v $(pwd):/data dockerfile:build
+#       - uses: actions/checkout@v2
+#       - name: Get Maven 3.8.1 & package
+#         run: |
+#           sudo apt remove openjdk-*
+#           sudo apt-get update && sudo apt-get install curl unzip openjdk-16-jdk
+#           curl -LsSfo $GITHUB_WORKSPACE/maven.zip https://mirror.navercorp.com/apache/maven/maven-3/3.8.1/binaries/apache-maven-3.8.1-bin.zip
+#           unzip maven.zip -d $GITHUB_WORKSPACE
+#           $GITHUB_WORKSPACE/apache-maven-3.8.1/bin/mvn -B package --file pom.xml
+#       - uses: actions/upload-artifact@v2
+#         with:
+#           name: package
+#           path: $GITHUB_WORKSPACE/target/*.jar
