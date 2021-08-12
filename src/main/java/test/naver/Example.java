@@ -46,25 +46,31 @@ class Main {
 
     public void info() throws Exception {
         org.jsoup.nodes.Document infoDoc;
-        while (reservation.$info_res == null
-                || (vaccinElements = (infoDoc = org.jsoup.Jsoup.parse(reservation.$info_res.body().string())).select("[data-id]"))
-                        .size() == 0) {
-            Thread.sleep((long) (Math.random() * 255 + 1990));
-            reservation.headersBuilder = new H(harFilePath) {
-                {
-                    this.loadReqHeadersFor("info");
-                    this.headerSetCookie(new C() {
-                        {
-                            this.b();
-                            this.s(reservation.requestBuilder, reservation.$info_res == null ? reservation.$res : reservation.$info_res);
-                        }
-                    }.getCookieHeaderString());
-                }
-            }.getReqHeadersBuilder();
-            System.gc();
-            reservation.info();
+        while (reservation.$info_res == null || vaccinElements.size() == 0) {
+            try {
+                Thread.sleep((long) (Math.random() * 255 + 1990));
+                reservation.headersBuilder = new H(harFilePath) {
+                    {
+                        this.loadReqHeadersFor("info");
+                        this.headerSetCookie(new C() {
+                            {
+                                this.b();
+                                this.s(reservation.requestBuilder,
+                                        reservation.$info_res == null ? reservation.$res : reservation.$info_res);
+                            }
+                        }.getCookieHeaderString());
+                    }
+                }.getReqHeadersBuilder();
+                reservation.info();
+                vaccinElements = (infoDoc = org.jsoup.Jsoup.parse(reservation.$info_res.body().string()))
+                        .select("[data-id]");
+            } catch (java.lang.IllegalStateException e) {
+                // TODO
+                e.printStackTrace();
+                continue;
+            }
         }
-        
+
     }
 
     public void pre_progress() throws Exception {
