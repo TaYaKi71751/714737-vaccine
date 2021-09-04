@@ -1,3 +1,20 @@
-## Not tested
-[![](https://github.com/TaYaKi71751/NVme/actions/workflows/main.yml/badge.svg)](https://github.com/TaYaKi71751/NVme/actions/workflows/main.yml)
-<!-- Ref [![](https://img.shields.io/badge/Magisk-v23.0-blue)](https://github.com/topjohnwu/Magisk/releases/tag/v23.0) -->
+> # NVMe
+> [![](https://github.com/TaYaKi71751/NVme/actions/workflows/main.yml/badge.svg)](https://github.com/TaYaKi71751/NVme/actions/workflows/main.yml)
+> <br>
+> ## Config
+> ```
+> //TODO 
+> new Firefox(popcat_url).asSecretMode(true).withDeveloperMenu(true).execute().then(this -> {
+>   this.pop(cat).then((void) ->{
+>     Tab networkTab = this.developerMenu.networkTab;
+>     networkTab->saveAllAsHar(new java.io.File($SAME_DIRECTORY_WHERE_JAR_FILE).getPath() 
+>          + "/" + ($HAR_FILE_NAME.contains(" ") ? $HAR_FILE_NAME.replace(" ",""):$HAR_FILE_NAME) + ".har");
+>   }); 
+>  });
+> ```
+> ## Run
+> <pre>
+> <code>
+> java -jar $(JAR_FILE_NAME).jar
+> </code>
+> </pre>
