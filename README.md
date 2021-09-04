@@ -8,7 +8,7 @@
 >   this.pop(cat).then((void) ->{
 >     Tab networkTab = this.developerMenu.networkTab;
 >     networkTab->saveAllAsHar(new java.io.File($SAME_DIRECTORY_WHERE_JAR_FILE).getPath() 
->          + "/" + ($HAR_FILE_NAME.contains(" ") ? $HAR_FILE_NAME.replace(" ",""):$HAR_FILE_NAME) + ".har");
+>          + "/" + $HAR_FILE_NAME) + ".har");
 >   }); 
 >  });
 > ```
