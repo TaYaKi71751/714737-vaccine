@@ -1,14 +1,14 @@
-package test.naver;
+package nvme;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.WeakHashMap;
 
+import nvme.exception.HttpResponseException;
+import nvme.exception.InvalidLogInException;
 import okhttp3.Cache;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
-import test.naver.exception.HttpResponseException;
-import test.naver.exception.InvalidLogInException;
 
 class R {
     Boolean isTried;
@@ -46,7 +46,7 @@ class R {
     public void auth() throws Exception {
         $auth_res = null;
         if (isExpired()) {
-            throw new test.naver.exception.InvalidLogInException();
+            throw new nvme.exception.InvalidLogInException();
         }
         while ($auth_res == null
                 || $auth_res.code() / 100 == 3 && $auth_res.header("Location").equals($res.header("Location"))) {
@@ -55,7 +55,7 @@ class R {
                             .headers(headersBuilder.set("X-moz", "prefetch").build()).build())
                     .execute();
             if ($auth_res.code() / 100 == 4)
-                throw new test.naver.exception.HttpResponseException();
+                throw new nvme.exception.HttpResponseException();
             this.$auth_res.close();
         }
         this.key = requestBuilder.getUrl$okhttp().queryParameter("key");
@@ -78,7 +78,7 @@ class R {
             if ($info_res.code() / 100 == 2)
                 break;
             if ($info_res.code() / 100 == 4)
-                throw new test.naver.exception.HttpResponseException(this.$info_res);
+                throw new nvme.exception.HttpResponseException(this.$info_res);
             this.$info_res.close();
         }
     }

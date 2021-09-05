@@ -1,10 +1,10 @@
-package test.naver;
+package nvme;
 
 import java.io.File;
 import java.util.Arrays;
 
+import nvme.exception.InvalidLogInException;
 import okhttp3.Cookie;
-import test.naver.exception.InvalidLogInException;
 
 public class C extends Object {
 

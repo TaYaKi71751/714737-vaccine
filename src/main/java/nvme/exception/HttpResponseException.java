@@ -1,4 +1,4 @@
-package test.naver.exception;
+package nvme.exception;
 
 public class HttpResponseException extends java.lang.Exception {
     String detailMessage = null;

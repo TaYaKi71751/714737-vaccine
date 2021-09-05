@@ -1,4 +1,4 @@
-package test.naver.exception;
+package nvme.exception;
 
 public class InvalidLogInException extends java.lang.Exception {
     String detailMessage = null;

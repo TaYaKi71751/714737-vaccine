@@ -1,4 +1,4 @@
-package test.naver;
+package nvme;
 
 import java.util.Arrays;
 import java.util.WeakHashMap;
@@ -28,7 +28,7 @@ class Main {
         reservation.headersBuilder = new H(harFilePath) {
             {
                 this.loadReqHeadersFor("auth");
-                this.headerSetCookie(new test.naver.C() {
+                this.headerSetCookie(new nvme.C() {
                     {
                         this.b();
                         this.s(reservation.requestBuilder, reservation.$res);
