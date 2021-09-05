@@ -46,4 +46,4 @@ jobs:
           with:
             name: package (JAR Files)
             path: |
-              target/*-jar-with-dependencies.jar
+              target/*.jar
