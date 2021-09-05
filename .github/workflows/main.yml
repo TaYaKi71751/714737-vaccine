@@ -42,16 +42,16 @@ jobs:
             docker build --force-rm --tag dockerfile:build .
             docker run -i -v $(pwd):/data dockerfile:build
             ls -la $(pwd)/target
-        - uses: "marvinpinto/action-automatic-releases@latest"
+        - uses: actions/upload-artifact@v2
+          with:
+            name: package (JAR Files)
+            path: |
+              target/*.jar
+        - uses: marvinpinto/action-automatic-releases@latest
           with:
             repo_token: "${{ secrets.GITHUB_TOKEN }}"
             automatic_release_tag: "latest"
             prerelease: true
             title: "Test Build"
             files: |
-              target/*.jar
-        - uses: actions/upload-artifact@v2
-          with:
-            name: package (JAR Files)
-            path: |
               target/*.jar
