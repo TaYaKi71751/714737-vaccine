@@ -6,9 +6,9 @@ name: Maven Package and Upload
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
+    branches: [ java-okhttp ]
   pull_request:
-    branches: [ main ]
+    branches: [ java-okhttp ]
   release:
     types: [created]
 
