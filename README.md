@@ -1,7 +1,7 @@
-> # NVMe
+> # NVMe(PCIe)
 > [![](https://github.com/TaYaKi71751/NVme/actions/workflows/main.yml/badge.svg)](https://github.com/TaYaKi71751/NVme/actions/workflows/main.yml)
 > <br>
-> Naver Vcc M e
+> Naver Vcc Mcr xec (PC Interface xec)
 > ## Install Dependencies
 >> ```
 >> pacman -S jdk-openjdk maven \
