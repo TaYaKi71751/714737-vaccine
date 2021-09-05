@@ -46,4 +46,4 @@ jobs:
           with:
             name: package (JAR Files)
             path: |
-              target/$(ls target|grep jar-with-dep).jar
+              target/*-jar-with-dependencies.jar
