@@ -1,7 +1,7 @@
 > # NVMe
 > [![](https://github.com/TaYaKi71751/NVme/actions/workflows/main.yml/badge.svg)](https://github.com/TaYaKi71751/NVme/actions/workflows/main.yml)
+> [![](https://tayaki71751.github.io/NVMe/svg/n.svg)](https://github.com/TaYaKi71751/NVMe/releases)
 > <br>
-> Naver Vcc Mcr xec
 > ## Install Dependencies
 >> ```
 >> pacman -S jdk-openjdk maven \
