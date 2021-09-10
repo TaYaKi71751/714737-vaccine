@@ -22,6 +22,14 @@
     <jacoco.unit-tests.limit.class-complexity>20</jacoco.unit-tests.limit.class-complexity>
     <jacoco.unit-tests.limit.method-complexity>5</jacoco.unit-tests.limit.method-complexity>
   </properties>
+  <name></name>
+    <licenses>
+        <license>
+            <name>DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE, Version 2.0</name>
+            <url>http://www.wtfpl.net/txt/copying/</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
   <dependencies>
 
     <!-- https://mvnrepository.com/artifact/org.codehaus.mojo/versions-maven-plugin -->
