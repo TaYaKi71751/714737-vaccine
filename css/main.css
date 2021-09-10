@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+body {
+    text-align: center;
+    font-family: "Open Sans", sans-serif;
+}
+.bg {
+    height:100%;
+    width:100%;
+    margin: 0%;
+    overflow:auto;
+    background: linear-gradient(to bottom left, rgba(65, 199, 159,127), rgba(145, 226, 169,127) );
+    font-size:xx-large;
+}
+.text {
+    /** 
+     * @TODO
+     * */
+}
+.btn {
+    /** 
+     * @TODO
+     * */
+}
+.title {
+    /** 
+     * @TODO
+     * */
+}
