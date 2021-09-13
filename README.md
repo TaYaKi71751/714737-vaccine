@@ -30,8 +30,9 @@
 >>    submit();
 >> }).onSuccess((cookies) -> {
 >>    f.setCookies(cookies);
->>    f.onRedirect((r) -> {
->>        if(r.headers.get("Location").contains("nidlogin.login?")){
+>>    f.onRedirect((req,res) -> {
+>>        if(res.headers.get("Location").contains("nidlogin.login")
+>>            && (req.method() != "POST"){
 >>            goto SIGNIN;
 >>        }
 >>    });
