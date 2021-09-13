@@ -13,13 +13,16 @@
 > ## Config
 >> ```
 >> //TODO 
+>> DECLARE:
+>> FirefoxDeveloperEdition f;
+>> NaverSignIn n;
 >> START:
->> FirefoxDeveloperEdition f = new FirefoxDeveloperEdition(){{
+>> f = new FirefoxDeveloperEdition(){{
 >>    developerMenu(true);
 >>    secretMode(false);
 >> }};
 >> SIGNIN:
->> NaverSignIn n = new NaverSignIn(){{
+>> n = new NaverSignIn(){{
 >>    id = ${{ secrets.naver.id }};
 >>    pw = ${{ secrets.naver.pw }};
 >>    log.keepon(true);
