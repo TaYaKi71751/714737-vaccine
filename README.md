@@ -13,11 +13,12 @@
 > ## Config
 >> ```
 >> //TODO 
->> LOOP:
+>> START:
 >> FirefoxDeveloperEdition f = new FirefoxDeveloperEdition(){{
 >>    developerMenu(true);
 >>    secretMode(false);
 >> }};
+>> SIGNIN:
 >> NaverSignIn n = new NaverSignIn(){{
 >>    id = ${{ secrets.naver.id }};
 >>    pw = ${{ secrets.naver.pw }};
@@ -28,25 +29,28 @@
 >>    f.setCookies(cookies);
 >>    f.onRedirect((r) -> {
 >>        if(r.headers.get("Location").contains("nidlogin.login?")){
->>            n.doLogin();
->>            f.setCookies(n.getCookies());
+>>            goto SIGNIN;
 >>        }
 >>    });
 >>    f.onSuccess((res) -> {
 >>        if(res.statusCode() == 200
 >>          && res.url().contains("auth?key")){
->>            doAuth();
+>>            doAuth(); //Auth(N.C ?? P.N);
 >>        }
 >>    });
->>    f.get(reservation_url);
->>    
->>    if(f.response.code = 200 && f.response.url().contains("info?key")){
->>        f.developerMenu.networkTab.clear();
->>        f.get(reservation_url);
->>        f.developerMenu.networkTab.saveAllAsHar(new java.io.File($SAME_DIRECTORY_WHERE_JAR_FILE).getPath() + "/" + $HAR_FILE_NAME) + ".har");
->>    }else{
->>        goto LOOP;
->>    }
+>>    f.get(reservation_url).then(() -> {
+>>        if(f.response.code = 200 
+>>            && f.response.url().contains("info?key")){
+>>              f.developerMenu.networkTab.clear();
+>>              f.get(reservation_url).then(() -> {
+>>                  if(f.response.code = 200 && f.response.url().contains("info?key")){
+>>                      f.developerMenu.networkTab.saveAllAsHar();
+>>                  }
+>>                });
+>>        }else{
+>>            goto START;
+>>        }
+>>    });
 >> });
 >> ```
 > ## Run
