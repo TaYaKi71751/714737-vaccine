@@ -43,7 +43,6 @@ jobs:
     - uses: actions/setup-java@v2
       with:
         distribution: 'zulu'
-        java-version: '16'
         check-latest: true
         cache: 'maven'
 
