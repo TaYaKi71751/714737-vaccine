@@ -1,7 +1,9 @@
 
 > # [![](https://raw.githubusercontent.com/TaYaKi71751/NVMe/gh-pages/svg/n.svg)](https://github.com/TaYaKi71751/NVMe/releases)
-> [![](https://github.com/TaYaKi71751/NVme/actions/workflows/main.yml/badge.svg)](https://github.com/TaYaKi71751/NVme/actions/workflows/main.yml)
- [![License: WTFPL](https://img.shields.io/badge/License-WTFPL-brightgreen.svg)](http://www.wtfpl.net/about/)
+> 
+[![](https://github.com/TaYaKi71751/NVMe/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/TaYaKi71751/NVMe/actions/workflows/codeql-analysis.yml)
+[![](https://github.com/TaYaKi71751/NVme/actions/workflows/main.yml/badge.svg)](https://github.com/TaYaKi71751/NVme/actions/workflows/main.yml)
+> [![License: WTFPL](https://img.shields.io/badge/License-WTFPL-brightgreen.svg)](http://www.wtfpl.net/about/)
 > <br>
 > ## Ref
 >> [changdoc/naver-vaccine-macro](https://github.com/changdoc/naver-vaccine-macro)<br>
