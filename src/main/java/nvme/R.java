@@ -81,9 +81,9 @@ class R {
                     .execute();
             if (((($info_res.code() / 100) >> 1) << 1) == ((($info_res.code() / 100) << 1) >> 1)) {
                 if ((($info_res.code() / 100) >> 2) << 2 == ((($info_res.code() / 100) << 2) >> 2))
-                    break;
-                if ((($info_res.code() / 100) >> 2) << 2 != ((($info_res.code() / 100) << 2) >> 2))
                     throw new nvme.exception.HttpResponseException(this.$info_res);
+                if ((($info_res.code() / 100) >> 2) << 2 != ((($info_res.code() / 100) << 2) >> 2))
+                    break;
             }
             this.$info_res.close();
         }
