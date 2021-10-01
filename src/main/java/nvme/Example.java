@@ -1,13 +1,20 @@
 package nvme;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.WeakHashMap;
 
+import org.jsoup.nodes.Element;
+
 class Main {
-    org.jsoup.select.Elements vaccinElements = null;
-    String cd = "", url = "", key = "", host = "", harFilePath = Arrays.asList(new java.io.File("./").listFiles())
-            .stream().filter(a -> a.getName().contains("har") && a.isFile()).toList().get(0).getName();
+    List<Element> vaccinElements = null;
+    String cd = "", url = "", key = "", host = "", harFilePath = "";
     R reservation;
+
+    public void loadHarFilePath() throws Exception {
+        this.harFilePath = Arrays.asList(new java.io.File("./").listFiles()).stream()
+                .filter(a -> a.getName().contains("har") && a.isFile()).toList().get(0).getName();
+    }
 
     public void reservation() throws Exception {
         reservation.headersBuilder = new H(harFilePath) {
@@ -44,6 +51,7 @@ class Main {
         host = reservation.requestBuilder.getUrl$okhttp().host();
     }
 
+    
     public void info() throws Exception {
         org.jsoup.nodes.Document infoDoc;
         while (reservation.$info_res == null || vaccinElements.size() == 0) {
@@ -62,8 +70,8 @@ class Main {
                     }
                 }.getReqHeadersBuilder();
                 reservation.info();
-                vaccinElements = (infoDoc = org.jsoup.Jsoup.parse(reservation.$info_res.body().string()))
-                        .select("[data-id]");
+                vaccinElements = (infoDoc = org.jsoup.Jsoup.parse(reservation.$info_res.body().string())).select("[data-cd]")
+                        .stream().filter(a -> !a.hasAttr("disabled")).toList();
             } catch (java.lang.IllegalStateException e) {
                 // TODO
                 e.printStackTrace();
@@ -73,9 +81,15 @@ class Main {
 
     }
 
+    /**
+     * Random available cd
+     * 
+     * @throws Exception
+     */
     public void pre_progress() throws Exception {
-        cd = vaccinElements.get((int) (Math.random() * vaccinElements.size())).attr("data-id");
-        // get.cd = "VEN00014";
+        reservation.cd = cd = vaccinElements
+                .get(Integer.parseInt((Math.random() + "").split(".")[1]) % vaccinElements.size()).attr("data-cd");
+        // reservation.cd = "VEN00014";  // <<  TEST VALUE
     }
 
     public void progress() throws Exception {
@@ -133,6 +147,7 @@ class Main {
     public static void main(String[] args) throws Exception {
         new Main() {
             {
+                this.loadHarFilePath();
                 this.reservation();
                 this.auth();
                 this.pre_info();

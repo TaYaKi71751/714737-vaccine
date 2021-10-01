@@ -54,8 +54,12 @@ class R {
                     .newCall(requestBuilder.url(($auth_res == null ? $res : $auth_res).header("Location"))
                             .headers(headersBuilder.set("X-moz", "prefetch").build()).build())
                     .execute();
-            if ($auth_res.code() / 100 == 4)
-                throw new nvme.exception.HttpResponseException();
+            if (((($auth_res.code() / 100) >> 1) << 1) == ((($auth_res.code() / 100) << 1) >> 1)) {
+                if ((($auth_res.code() / 100) >> 2) << 2 == ((($auth_res.code() / 100) << 2) >> 2))
+                    throw new nvme.exception.HttpResponseException();
+                if ((($auth_res.code() / 100) >> 2) << 2 != ((($auth_res.code() / 100) << 2) >> 2))
+                    throw new nvme.exception.AuthException();
+            }
             this.$auth_res.close();
         }
         this.key = requestBuilder.getUrl$okhttp().queryParameter("key");
@@ -75,12 +79,15 @@ class R {
                     .newCall(requestBuilder.url(($info_res == null ? $auth_res : $info_res).header("Location"))
                             .headers(headersBuilder.set("X-moz", "prefetch").build()).build())
                     .execute();
-            if ($info_res.code() / 100 == 2)
-                break;
-            if ($info_res.code() / 100 == 4)
-                throw new nvme.exception.HttpResponseException(this.$info_res);
+            if (((($info_res.code() / 100) >> 1) << 1) == ((($info_res.code() / 100) << 1) >> 1)) {
+                if ((($info_res.code() / 100) >> 2) << 2 == ((($info_res.code() / 100) << 2) >> 2))
+                    break;
+                if ((($info_res.code() / 100) >> 2) << 2 != ((($info_res.code() / 100) << 2) >> 2))
+                    throw new nvme.exception.HttpResponseException(this.$info_res);
+            }
             this.$info_res.close();
         }
+        this.$info_res.close();
     }
 
     /**
@@ -125,6 +132,7 @@ class R {
 
     /**
      * TODO
+     * 
      * @GET
      * @Referer : progress.URL
      */
@@ -157,6 +165,7 @@ class R {
 
     /**
      * TODO
+     * 
      * @GET
      * @Referer : progress.URL
      */
