@@ -54,7 +54,7 @@ class Main {
     
     public void info() throws Exception {
         org.jsoup.nodes.Document infoDoc;
-        while (reservation.$info_res == null || vaccinElements.size() == 0) {
+        while (reservation.$info_res == null || vaccinElements == null || vaccinElements.size() == 0) {
             try {
                 Thread.sleep((long) (Math.random() * 255 + 1990));
                 reservation.headersBuilder = new H(harFilePath) {

@@ -84,10 +84,9 @@ class R {
                     throw new nvme.exception.HttpResponseException(this.$info_res);
                 if ((($info_res.code() / 100) >> 2) << 2 != ((($info_res.code() / 100) << 2) >> 2))
                     break;
-            }
-            this.$info_res.close();
+            } else
+                $info_res.close();
         }
-        this.$info_res.close();
     }
 
     /**
