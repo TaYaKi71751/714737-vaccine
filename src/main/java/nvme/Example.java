@@ -1,14 +1,17 @@
 package nvme;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.WeakHashMap;
 
 import org.jsoup.nodes.Element;
 
+import nvme.exception.NotEligibleVaccineSelectException;
+
 class Main {
-    List<Element> vaccinElements = null;
-    String cd = "", url = "", key = "", host = "", harFilePath = "";
+    List<Element> vaccinRadioItemElements = null, availaVaccinElements = null;
+    String url = "", key = "", host = "", harFilePath = "";
     R reservation;
 
     public void loadHarFilePath() throws Exception {
@@ -51,10 +54,9 @@ class Main {
         host = reservation.requestBuilder.getUrl$okhttp().host();
     }
 
-    
     public void info() throws Exception {
         org.jsoup.nodes.Document infoDoc;
-        while (reservation.$info_res == null || vaccinElements == null || vaccinElements.size() == 0) {
+        while (reservation.$info_res == null || availaVaccinElements == null || availaVaccinElements.size() == 0) {
             try {
                 Thread.sleep((long) (Math.random() * 255 + 1990));
                 reservation.headersBuilder = new H(harFilePath) {
@@ -70,10 +72,11 @@ class Main {
                     }
                 }.getReqHeadersBuilder();
                 reservation.info();
-                vaccinElements = (infoDoc = org.jsoup.Jsoup.parse(reservation.$info_res.body().string())).select("[data-cd]")
-                        .stream().filter(a -> !a.hasAttr("disabled")).toList();
+                infoDoc = org.jsoup.Jsoup.parse(reservation.$info_res.body().string());
+                vaccinRadioItemElements = infoDoc.select("ul > li[class=radio_item]");
+                availaVaccinElements = vaccinRadioItemElements.stream()
+                        .filter(a -> !a.select("[data-cd]").first().hasAttr("disabled")).toList();
             } catch (java.lang.IllegalStateException e) {
-                // TODO
                 e.printStackTrace();
                 continue;
             }
@@ -81,15 +84,63 @@ class Main {
 
     }
 
+    public int random() {
+        int _tmp = (int) Long.parseLong((Math.random() + "").replace(".", ""));
+        return (_tmp != 0) ? ((_tmp < 0) ? (Integer.parseInt(String.valueOf(_tmp).replace("-", ""))) : (_tmp))
+                : random();
+    }
+
+    public boolean includesAnd(String[] words, String... filterWords) {
+        List<String> _words = Arrays.asList(words), _filterWords = Arrays.asList(filterWords);
+        ArrayList<String> matchedList = new ArrayList<String>();
+        _words.stream().forEach(word -> {
+            _filterWords.stream().forEach(filterWord -> {
+                if (!word.contains(filterWord))
+                    return;
+                matchedList.add(word);
+            });
+        });
+        return (_filterWords.size() > matchedList.size()) ? false : true;
+    }
+
+    public boolean isEligibleVaccine(String cd) throws NotEligibleVaccineSelectException {
+        List<Element> selectedVaccineElements = vaccinRadioItemElements.stream()
+                .filter(a -> (a.select("[data-cd]").first().attr("data-cd").equals(cd))).toList();
+        for (Element a : selectedVaccineElements) {
+            String lastText = a.select("span").last().text();
+            String[] lastTextsWithOutNum = lastText.replaceAll("[0-9]", "").split(" ");
+            if (!lastText.matches("[0-9]")) {
+                final String available = "가능", time = "시간", upper = "이상", age = "세";
+                if (includesAnd(lastTextsWithOutNum, available, time)) {
+                    return false;
+                }
+                if (includesAnd(lastTextsWithOutNum, available, upper, age)) {
+                    throw new NotEligibleVaccineSelectException();
+                }
+            }
+        }
+        return true;
+    }
+
+    boolean isNull(Object o) {
+        return o == null;
+    }
+
     /**
-     * Random available cd
+     * @if reservation.cd value is null
+     * @set value to Random available cd
      * 
      * @throws Exception
      */
-    public void pre_progress() throws Exception {
-        reservation.cd = cd = vaccinElements
-                .get(Integer.parseInt((Math.random() + "").split(".")[1]) % vaccinElements.size()).attr("data-cd");
-        // reservation.cd = "VEN00014";  // <<  TEST VALUE
+    public void setCd() throws Exception {
+        if (isNull(reservation.cd)) {
+            reservation.cd = availaVaccinElements.get(random() % availaVaccinElements.size()).attr("data-cd");
+        }
+        if (!isNull(reservation.cd)) {
+            if (isEligibleVaccine(reservation.cd)) {
+                return;
+            }
+        }
     }
 
     public void progress() throws Exception {
@@ -152,7 +203,7 @@ class Main {
                 this.auth();
                 this.pre_info();
                 this.info();
-                this.pre_progress();
+                this.setCd();
                 this.progress();
                 this.confirm();
                 this.result();

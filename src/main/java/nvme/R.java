@@ -223,6 +223,7 @@ class R {
         reservationParams = getReservationParams();
         this.orgCd = reservationParams.get("orgCd");
         this.sid = reservationParams.get("sid");
+        this.cd = reservationParams.get("cd");
     }
 
     private HashMap<String, String> getReservationParams() {
