@@ -1,0 +1,3 @@
+[submodule "sub_modules/NVR"]
+	path = sub_modules/NVR
+	url = https://github.com/corcc/NVR
