@@ -1,5 +1,4 @@
 node_modules
-sub_modules
 *.har
 *.bak
 .env
