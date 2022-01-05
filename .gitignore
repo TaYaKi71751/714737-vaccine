@@ -4,3 +4,7 @@ node_modules
 .env
 .env.*
 package-lock.json
+_cache
+target
+config.d.ts
+config.ts

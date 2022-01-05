@@ -1,0 +1,8 @@
+export const config = {
+	orgCd: '56781234',
+	sid: '43218765',
+	vaccines: [
+		'VEN',
+		'VEN000'
+	]
+};
