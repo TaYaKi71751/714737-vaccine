@@ -134,7 +134,9 @@ class Main {
      */
     public void setCd() throws Exception {
         if (isNull(reservation.cd)) {
-            reservation.cd = availaVaccinElements.get(random() % availaVaccinElements.size()).attr("data-cd");
+            // reservation.cd = availaVaccinElements.get(random() %
+            // availaVaccinElements.size()).attr("data-cd");
+            reservation.cd = "VEN00013";
         }
         if (!isNull(reservation.cd)) {
             if (isEligibleVaccine(reservation.cd)) {

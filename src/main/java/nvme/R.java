@@ -110,13 +110,20 @@ class R {
      */
     public void confirm() throws Exception {
         String url = "https://" + requestBuilder.getUrl$okhttp().host() + "/reservation/confirm";
-        $confirm_res = nonRdrctOkHttpClient.newCall(requestBuilder.url(url)
-                .headers(new okhttp3.Headers.Builder().addAll(headersBuilder.build()).removeAll("Pragma")
-                        .removeAll("Cache-Control").removeAll("Sec-Fetch-User").removeAll("Upgrade-Insecure-Requests")
-                        .removeAll("X-moz").set("Sec-Fetch-Site", "same-origin").set("Sec-Fetch-Mode", "cors")
-                        .set("Sec-Fetch-Dest", "empty").set("Accept", "*/*").set("content-type", "application/json")
-                        .set("Content-Length", "0").build())
-                .post((RequestBody) (new FormBody.Builder().add("key", this.key).build())).build()).execute();
+        RequestBody postData = new FormBody.Builder().add("key", this.key).build();
+        okhttp3.Headers headers = new okhttp3.Headers.Builder().addAll(headersBuilder.build())
+                .removeAll("Pragma")
+                .removeAll("Cache-Control").removeAll("Sec-Fetch-User")
+                .removeAll("Upgrade-Insecure-Requests")
+                .removeAll("X-moz").set("Sec-Fetch-Site",
+                        "same-origin")
+                .set("Sec-Fetch-Mode", "cors")
+                .set("Sec-Fetch-Dest", "empty").set("Accept", "*/*")
+                .set("content-type", "application/json")
+                .set("Content-Length", "0")
+                .build();
+        okhttp3.Request req = requestBuilder.url(url).headers(headers).post(postData).build();
+        $confirm_res = nonRdrctOkHttpClient.newCall(req).execute();
         switch (this.$confirm_res.code() / 100) {
             case 4:
                 throw new HttpResponseException(this.$confirm_res);
