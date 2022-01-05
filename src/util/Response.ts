@@ -22,24 +22,30 @@ export function getVaccinesFromResponseBody ({
 	vaccines: any
 } {
 	const infoCheerio: CheerioAPI = loadCheerio(body);
-	const vaccineInputs = infoCheerio('ul > li.radio_item > input');
-	const vaccines: any = ov(vaccineInputs).filter((_) =>
-		(typeof _.attribs != 'undefined')).map((vaccineInput): {
+	const vaccineRadioItems = infoCheerio('ul > li.radio_item');
+	const vaccines: any = ov(vaccineRadioItems).filter((_) =>
+		(typeof _.attribs != 'undefined')).map((vaccineRadioItem): {
 			[x: string]: string | {
 				[x: string]: string
 			}
 		} => {
+		const vaccineRadioItemCheerio = loadCheerio(vaccineRadioItem);
+		const vaccineInput = vaccineRadioItemCheerio('input')[0];
 		const vaccineInputAttribs = vaccineInput.attribs;
 		let vaccine: {
 				[x: string]: string
 			} = { '': '' };
 		const cd = vaccineInputAttribs['data-cd'];
 		const name = vaccineInputAttribs['data-name'];
+		const quantity = vaccineRadioItemCheerio('label > .num_box > .num').text().trim();
+		const notice = vaccineRadioItemCheerio('label > .num_box > .notice').text().trim();
 		const { disabled } = vaccineInputAttribs;
 		vaccine = {
 			cd,
 			name,
-			disabled
+			disabled,
+			quantity,
+			notice
 		};
 		console.log(vaccine);
 		return vaccine;

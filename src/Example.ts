@@ -8,7 +8,6 @@ import { config } from 'dotenv';
 import { randomNumber } from './util/Random';
 import { getVaccinesFromResponseBody } from './util/Response';
 config();
-console.log(standbyRequest);
 async function followRedirect ({
 	res
 }: {
@@ -61,7 +60,7 @@ async function vaccineQuantity () {
 	});
 	const filterAvailable:Function = function (r:any):any {
 		const _r = r;
-		_r.vaccine = _r.vaccines.filter((_: any) => (!_.disabled));
+		_r.vaccines = _r.vaccines.filter((_: any) => (!_.disabled));
 		return _r;
 	};
 	result = filterAvailable(result);
