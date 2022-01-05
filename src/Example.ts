@@ -1,83 +1,55 @@
-import {
-	authRequest,
-	standbyRequest,
-	infoRequest
-} from '@corcc/nvr';
-import { LightResponse } from '@corcc/nvr/lib/util/type';
-import { config } from 'dotenv';
-import { randomNumber } from './util/Random';
-import { getVaccinesFromResponseBody } from './util/Response';
-config();
-async function followRedirect ({
-	res
-}: {
-	res: any
-}): Promise<LightResponse | any> {
-	if (res.responseCode == 200) {
-		const { location } = res;
-		if (!location) {
-			let result = await res;
-			result = getVaccinesFromResponseBody(res);
-			return result;
-		}
-	}
-	if (res.responseCode == 302) {
-		const u: any = new URL('https://example.com');
-		u.params = { '': '' };
-		let _res: LightResponse = {
-			responseCode: 0,
-			headers: {},
-			body: '',
-			location: u
-		};
-		const { key } = res.location.params;
-		if (res.location.pathname.indexOf('auth') > -1) {
-			_res = await authRequest({
-				key
-			});
-		}
-		if (res.location.pathname.indexOf('info') > -1) {
-			_res = await infoRequest({
-				key
-			});
-		}
-		if (_res.responseCode == 0) {
-			throw new Error();
-		}
-		return await followRedirect({
-			res: _res
-		});
-	}
-}
 
-async function vaccineQuantity () {
-	const standByResponse: LightResponse = await standbyRequest({
-		orgCd: process.env.orgCd,
-		sid: process.env.sid
+import { confirmRequest, errorRequest, failureRequest, progressRequest, successRequest } from '@corcc/nvr';
+import { config } from 'dotenv';
+import { vaccineQuantity } from './info/Request';
+config();
+
+export async function reservationSubmit ({
+	org,
+	key,
+	vaccines
+}: {
+	org: string,
+	key: string,
+	vaccines: any
+}): Promise<any> {
+	config();
+	const name = process.env.VACCINE_NAME;
+	let { cd }: any = vaccines.filter((vaccine: any) => (vaccine.name.indexOf(name) == 0));
+	cd = cd ? cd[0] : cd;
+	const progressResult = await progressRequest({
+		key,
+		cd
 	});
-	let result = await followRedirect({
-		res: standByResponse
-	});
-	const filterAvailable:Function = function (r:any):any {
-		const _r = r;
-		_r.vaccines = _r.vaccines.filter((_: any) => (!_.disabled));
-		return _r;
-	};
-	result = filterAvailable(result);
-	let infoResponse: any;
-	while (!result.vaccines.length) {
-		const twoSec: number = 2000;
-		const randomTwoSec:number = twoSec + randomNumber(randomNumber(0x7FF));
-		await new Promise(resolve => setTimeout(resolve, randomTwoSec));
-		infoResponse = await infoRequest({
-			key: result.key
+	const progressResponseCode = progressResult.responseCode;
+	const confirmResult = await (async function (r: number) {
+		switch ((r / 100)) {
+		case 2: return await confirmRequest({
+			key,
+			cd
 		});
-		result = getVaccinesFromResponseBody(infoResponse);
-		result = filterAvailable(result);
+		default: throw new Error();
+		}
+	})(Number(progressResponseCode));
+	const { code } = JSON.parse(confirmResult.body);
+	switch (code) {
+	case 'success': return successRequest({
+		key,
+		cd
+	});
+	case 'failure': return failureRequest({
+		key,
+		cd,
+		code
+	});
+	case 'undefined': return errorRequest({
+		key,
+		cd
+	});
 	}
-	return result;
 }
 
 (async function () {
-	await vaccineQuantity();
+	const vaccinesQuantities = await vaccineQuantity();
+	const reservationResult = await reservationSubmit(vaccinesQuantities);
 })();

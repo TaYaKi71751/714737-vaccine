@@ -9,6 +9,9 @@ export function getDataKeyFromResponseBody ({
 	body,
 	headers
 }: LightResponse): string {
+	if (responseCode != 200) {
+		throw new Error();
+	}
 	const infoCheerio: CheerioAPI = loadCheerio(body);
 	return infoCheerio('[data-key]').attr()['data-key'];
 }
@@ -18,11 +21,16 @@ export function getVaccinesFromResponseBody ({
 	body,
 	headers
 }: LightResponse): {
+	org: string,
 	key: string,
 	vaccines: any
 } {
+	if (responseCode != 200) {
+		throw new Error();
+	}
 	const infoCheerio: CheerioAPI = loadCheerio(body);
 	const vaccineRadioItems = infoCheerio('ul > li.radio_item');
+	const org = infoCheerio('.h_title > span').text().trim();
 	const vaccines: any = ov(vaccineRadioItems).filter((_) =>
 		(typeof _.attribs != 'undefined')).map((vaccineRadioItem): {
 			[x: string]: string | {
@@ -51,6 +59,7 @@ export function getVaccinesFromResponseBody ({
 		return vaccine;
 	});
 	return {
+		org,
 		key: infoCheerio('[data-key]').attr()['data-key'],
 		vaccines
 	};
