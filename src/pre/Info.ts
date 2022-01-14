@@ -15,8 +15,10 @@ export async function Info (anyResponse: LightResponse): Promise<LightResponse> 
 	const { responseCode } = res;
 
 	switch ((responseCode / 100).toFixed(0)) {
-	case '3': return res;
-	case '2': return res;
+	case '3':
+		return res;
+	case '2':
+		return res;
 	}
 	throw new Error(`${responseCode}`);
 }

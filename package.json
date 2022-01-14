@@ -1,25 +1,25 @@
 {
-  "name": "nvme",
-  "scripts": {
-    "example": "ts-node src/Example.ts",
-    "eslint-ts-fix": "eslint --fix --ext .ts",
-    "eslint": "eslint --ext .ts ."
-  },
-  "dependencies": {
-    "@corcc/nvr": "github:corcc/NVR#dist",
-    "@types/node": "^17.0.5",
-    "cheerio": "^1.0.0-rc.10",
-    "ts-node": "^10.4.0",
-    "tsc": "^2.0.3",
-    "typescript": "^4.5.4"
-  },
-  "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.8.1",
-    "@typescript-eslint/parser": "^5.8.1",
-    "eslint": "^7.32.0",
-    "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.2.0"
-  }
+	"name": "nvme",
+	"scripts": {
+		"example": "ts-node src/Example.ts",
+		"lint:fix": "eslint --fix --ext .ts,.tsx .",
+		"lint": "eslint"
+	},
+	"dependencies": {
+		"@corcc/nvr": "github:corcc/NVR#dist",
+		"@types/node": "^17.0.5",
+		"cheerio": "^1.0.0-rc.10",
+		"ts-node": "^10.4.0",
+		"tsc": "^2.0.3",
+		"typescript": "^4.5.4"
+	},
+	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "^5.8.1",
+		"@typescript-eslint/parser": "^5.8.1",
+		"eslint": "^7.32.0",
+		"eslint-config-standard": "^16.0.3",
+		"eslint-plugin-import": "^2.25.3",
+		"eslint-plugin-node": "^11.1.0",
+		"eslint-plugin-promise": "^5.2.0"
+	}
 }

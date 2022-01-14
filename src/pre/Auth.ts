@@ -2,7 +2,9 @@ import { authRequest } from '@corcc/nvr';
 import { LightResponse } from '@corcc/nvr/lib/util/type';
 import { TypeCheck } from '../util/Type';
 
-export async function Auth (initResponse: LightResponse): Promise<LightResponse> {
+export async function Auth (
+	initResponse: LightResponse
+): Promise<LightResponse> {
 	const res = await (async function (r): Promise<LightResponse> {
 		let { location }: any = r;
 		location = TypeCheck(location);
@@ -21,7 +23,8 @@ export async function Auth (initResponse: LightResponse): Promise<LightResponse>
 		}
 		return res;
 	}
-	case '2': return res;
+	case '2':
+		return res;
 	}
 	throw new Error(`${responseCode}`);
 }

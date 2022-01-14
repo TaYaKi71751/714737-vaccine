@@ -1,7 +1,9 @@
 import { infoRequest } from '@corcc/nvr';
 import { LightResponse } from '@corcc/nvr/lib/util/type';
 
-export async function Resolve (res: any | LightResponse): Promise<any | LightResponse> {
+export async function Resolve (
+	res: any | LightResponse
+): Promise<any | LightResponse> {
 	if (res.responseCode == 200) {
 		const { location } = res;
 		if (!location) {

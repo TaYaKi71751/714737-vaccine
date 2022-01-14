@@ -11,7 +11,8 @@ export async function Init (): Promise<LightResponse> {
 	const { responseCode } = res;
 
 	switch ((responseCode / 100).toFixed(0)) {
-	case '3': return res;
+	case '3':
+		return res;
 	}
 	throw new Error(`${responseCode}`);
 }

@@ -1,4 +1,3 @@
-
 import { LightResponse } from '@corcc/nvr/lib/util/type';
 import { getVaccinesFromResponseBody } from '../util/Response';
 

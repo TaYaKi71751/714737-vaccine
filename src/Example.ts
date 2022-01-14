@@ -1,6 +1,11 @@
-import { confirmRequest, errorRequest, failureRequest, progressRequest, successRequest } from '@corcc/nvr';
+import {
+	confirmRequest,
+	errorRequest,
+	failureRequest,
+	progressRequest,
+	successRequest
+} from '@corcc/nvr';
 import { LightResponse } from '@corcc/nvr/lib/util/type';
-import { exit } from 'process';
 import { Auth, Init, Info, vaccineQuantity, filterAvailable } from './pre';
 import { filterSelected } from './pre/Select';
 import { ReservationInfo, VaccineInfo } from './type';
@@ -8,15 +13,15 @@ import { randomNumber } from './util/Random';
 import { getDataKeyFromResponseBody } from './util/Response';
 
 type Response = {
-	standby?: LightResponse,
-	auth?: LightResponse,
-	info?: LightResponse,
-	progress?: LightResponse,
-	confirm?: LightResponse,
-	success?: LightResponse,
-	failure?: LightResponse,
-	_error?: LightResponse,
-}
+	standby?: LightResponse;
+	auth?: LightResponse;
+	info?: LightResponse;
+	progress?: LightResponse;
+	confirm?: LightResponse;
+	success?: LightResponse;
+	failure?: LightResponse;
+	_error?: LightResponse;
+};
 function InitResponse () {
 	return {
 		standby: undefined,
@@ -56,8 +61,8 @@ export async function Example () {
 	res.auth = await Auth(res.standby);
 	do {
 		const twoSec: number = 2000;
-		const randomTwoSec:number = twoSec + randomNumber(randomNumber(0x7FF));
-		await new Promise(resolve => setTimeout(resolve, randomTwoSec));
+		const randomTwoSec: number = twoSec + randomNumber(randomNumber(0x7ff));
+		await new Promise((resolve) => setTimeout(resolve, randomTwoSec));
 		res.info = await Info(res.auth);
 		description = await vaccineQuantity(res.info);
 		all = await description.vaccines;
@@ -76,22 +81,23 @@ export async function Example () {
 			cd
 		});
 		switch (res.confirm?.responseCode) {
-		case 200: return await (async function (body: any) {
-			const { code }: any = JSON.parse(body ?? '{"":""}');
-			if (code.includes('SUCCESS')) {
-				res.success = await successRequest({
+		case 200:
+			return await (async function (body: any) {
+				const { code }: any = JSON.parse(body ?? '{"":""}');
+				if (code.includes('SUCCESS')) {
+					res.success = await successRequest({
+						key,
+						cd
+					});
+					return res.success;
+				}
+				res.failure = await failureRequest({
 					key,
-					cd
+					cd,
+					code
 				});
-				return res.success;
-			}
-			res.failure = await failureRequest({
-				key,
-				cd,
-				code
-			});
-			return res.failure;
-		})(res.confirm.body);
+				return res.failure;
+			})(res.confirm.body);
 		}
 	} catch (err) {
 		console.error(err);
