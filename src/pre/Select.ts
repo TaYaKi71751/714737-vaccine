@@ -13,9 +13,9 @@ export function filterSelected (vaccineQuantities: Array<VaccineInfo>) {
 				.filter(([k, v]: any) => {
 					return selectedVaccines.filter((s: string): any => {
 						return v.includes(s);
-					})[0];
+					}).length;
 				})
-		);
+		).length;
 	});
 	return _a;
 }

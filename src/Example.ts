@@ -108,7 +108,4 @@ export async function Example () {
 	}
 }
 
-// Example()
-// 	.then((result) => {
-// 		exit(0);
-// 	});
+Example();
