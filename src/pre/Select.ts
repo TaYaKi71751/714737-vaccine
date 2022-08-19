@@ -1,21 +1,23 @@
 import { VaccineInfo } from '../type';
-import { loadConfig } from '../util/Config';
+import { Config, loadConfig, VaccineTarget } from '../util/Config';
 const oe = Object.entries;
 
-export function filterSelected (vaccineQuantities: Array<VaccineInfo>) {
-	const config = loadConfig();
-	const selectedVaccines = config.vaccines;
-	let _a = vaccineQuantities;
-	_a = _a.filter((vaccineQuantity) => {
-		return (
-			oe(vaccineQuantity)
-				.filter(([k, v]) => typeof v == 'string')
-				.filter(([k, v]: any) => {
-					return selectedVaccines.filter((s: string): any => {
-						return v.includes(s);
-					}).length;
-				})
-		).length;
-	});
-	return _a;
+function select (one:VaccineTarget, ...from: Array<VaccineInfo>):boolean {
+	for (const e of from) {
+		for (const [k, v] of oe(e)) {
+			switch (one?.constructor) {
+			case String: if (v == one) { return v == one; } else { continue; }
+			case RegExp: if (one instanceof RegExp) { return !!(v.match(one)?.length); } else { continue; }
+			case Object: if (oe(one).length) { return oe(one).filter(([k, v]:[k:string, v:RegExp|string]) => select(v, e)).length == oe(one).length; } else { continue; }
+			default: continue;
+			}
+		}
+	}
+	return false;
+}
+
+export function filterSelected (from: Array<VaccineInfo>) {
+	const config:Config = loadConfig();
+	const result = from.filter(() => (config?.vaccine?.filter((e) => select(e, ...from))));
+	return result;
 }

@@ -1,12 +1,12 @@
 import { standbyRequest } from '@corcc/nvr';
 import { LightResponse } from '@corcc/nvr/lib/util/type';
-import { loadConfig } from '../util/Config';
+import { VaccineOrganizationTarget, VaccineOrganizationTargetProp } from '../util/Config';
 
-export async function Init (): Promise<LightResponse> {
-	const { orgCd, sid }: any = loadConfig();
+export async function Init (organizationConfig:VaccineOrganizationTarget): Promise<LightResponse> {
+	const {orgCd,sid} = new VaccineOrganizationTargetProp(organizationConfig);
 	const res = await standbyRequest({
-		orgCd: orgCd,
-		sid: sid
+		orgCd,
+		sid
 	});
 	const { responseCode } = res;
 
